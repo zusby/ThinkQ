@@ -1,12 +1,14 @@
 package it.zusby.ThinkQ.Controllers.Resource;
 
 import it.zusby.ThinkQ.Controllers.Service.DocumentService;
+import it.zusby.ThinkQ.Mappers.DocumentModelMapper;
 import it.zusby.ThinkQ.Types.Dto.DocumentCreateDTO;
 import it.zusby.ThinkQ.Types.Dto.DocumentDTO;
 import lombok.extern.slf4j.Slf4j;
 import org.hibernate.ResourceClosedException;
 import org.hibernate.service.spi.ServiceException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.time.LocalDateTime;
@@ -18,7 +20,7 @@ public class DocumentResource {
     private final  DocumentService ds;
 
     @Autowired
-    public DocumentResource(DocumentService ds) {
+    public DocumentResource(DocumentService ds, @Qualifier("documentModelMapperImpl") DocumentModelMapper mapper) {
         this.ds = ds;
     }
 
@@ -27,6 +29,7 @@ public class DocumentResource {
         log.info("New document {}, {}", doc.getTitle(), LocalDateTime.now());
 
         try{
+            ds.generateQuestions(doc);
             return ResponseEntity.ok().body(new DocumentDTO());
 
         }catch (ServiceException e){

@@ -1,9 +1,10 @@
 package it.zusby.ThinkQ.Controllers.Resource;
 
+import it.zusby.ThinkQ.Controllers.Service.DocumentService;
+import it.zusby.ThinkQ.Types.Dto.TestDocumentDTO;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
 
@@ -11,13 +12,17 @@ import java.time.LocalDateTime;
 @RequestMapping("/test")
 @Slf4j
 public class TestResource {
-
-    public TestResource() {
+    private final DocumentService service;
+    @Autowired
+    public TestResource(DocumentService service) {
+        this.service = service;
     }
 
-    @GetMapping("")
-    public String test() {
+    @PutMapping("/generate")
+    public TestDocumentDTO testDocument(@RequestBody TestDocumentDTO dto) {
         log.info("GET request from TEST at {}", LocalDateTime.now());
-        return "test";
+        return this.service.generateQuestions(dto);
+
+
     }
 }
