@@ -8,3 +8,9 @@ import org.mapstruct.Mapper;
 public interface DocumentModelMapper {
     DocumentModel fromCreateDTO(DocumentCreateDTO dto);
 }
+
+@Mapper(componentModel = "spring")
+public interface DocumentEntityMapper {
+    DocumentEntity fromModelToEntity(DocumentModel model);
+    DocumentModel fromEntityToModel(DocumentEntity entity);
+}

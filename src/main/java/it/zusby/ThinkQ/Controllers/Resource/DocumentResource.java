@@ -36,4 +36,29 @@ public class DocumentResource {
             throw new ResourceClosedException(e.getMessage());
         }
     }
+    @GetMapping("/get/{id}")
+    public ResponseEntity<DocumentDTO> newDocument(@@PathVariable String id) {
+        log.info("get document {}, {}", id, LocalDateTime.now());
+
+        try{
+            var doc = ds.getDocument(id);
+            return ResponseEntity.ok().body(new DocumentDTO());
+        }
+        catch (ServiceException e){
+            throw new ResourceClosedException(e.getMessage());
+        }
+    }
+
+    @DeleteMapping("/delete/{id}")
+    public ResponseEntity<DocumentDTO> newDocument(@@PathVariable String id) {
+        log.info("get document {}, {}", id, LocalDateTime.now());
+
+        try{
+            var doc = ds.delete(id);
+            return ResponseEntity.ok();
+        }
+        catch (ServiceException e){
+            throw new ResourceClosedException(e.getMessage());
+        }
+    }
 }
