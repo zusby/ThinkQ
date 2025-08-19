@@ -1,12 +1,13 @@
 package it.zusby.ThinkQ.Types.Entity;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.Table;
 import lombok.*;
 
 import java.time.LocalDateTime;
 
 
-@Entity
+@Entity @Table(name="questions_feedbacks")
 @Getter
 @Setter
 @ToString

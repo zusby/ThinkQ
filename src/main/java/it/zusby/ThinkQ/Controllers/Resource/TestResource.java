@@ -18,11 +18,11 @@ public class TestResource {
         this.service = service;
     }
 
-    @PutMapping("/generate")
-    public TestDocumentDTO testDocument(@RequestBody TestDocumentDTO dto) {
-        log.info("GET request from TEST at {}", LocalDateTime.now());
-        return this.service.generateQuestions(dto);
-
-
-    }
+//    @PutMapping("/generate")
+//    public TestDocumentDTO testDocument(@RequestBody TestDocumentDTO dto) {
+//        log.info("GET request from TEST at {}", LocalDateTime.now());
+//        return this.service.generateQuestions(dto);
+//
+//
+//    }
 }

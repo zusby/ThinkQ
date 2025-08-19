@@ -29,20 +29,17 @@ public class DocumentResource {
         log.info("New document {}, {}", doc.getTitle(), LocalDateTime.now());
 
         try{
-            ds.generateQuestions(doc);
-            return ResponseEntity.ok().body(new DocumentDTO());
-
+            return ResponseEntity.ok().body(ds.generateQuestions(doc));
         }catch (ServiceException e){
             throw new ResourceClosedException(e.getMessage());
         }
     }
     @GetMapping("/get/{id}")
-    public ResponseEntity<DocumentDTO> newDocument(@@PathVariable String id) {
+    public ResponseEntity<DocumentDTO> getDocument(@PathVariable String id) {
         log.info("get document {}, {}", id, LocalDateTime.now());
 
         try{
-            var doc = ds.getDocument(id);
-            return ResponseEntity.ok().body(new DocumentDTO());
+            return ResponseEntity.ok().body(ds.getDocument(id));
         }
         catch (ServiceException e){
             throw new ResourceClosedException(e.getMessage());
@@ -50,12 +47,12 @@ public class DocumentResource {
     }
 
     @DeleteMapping("/delete/{id}")
-    public ResponseEntity<DocumentDTO> newDocument(@@PathVariable String id) {
-        log.info("get document {}, {}", id, LocalDateTime.now());
+    public ResponseEntity<Boolean> deleteDocument(@PathVariable String id) {
+        log.info("delete document {}, {}", id, LocalDateTime.now());
 
         try{
-            var doc = ds.delete(id);
-            return ResponseEntity.ok();
+            ds.delete(id);
+            return ResponseEntity.ok().body(Boolean.TRUE);
         }
         catch (ServiceException e){
             throw new ResourceClosedException(e.getMessage());

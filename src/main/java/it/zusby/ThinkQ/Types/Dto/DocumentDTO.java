@@ -9,7 +9,7 @@ import java.util.List;
 @EqualsAndHashCode(callSuper = true)
 @Data
 public class DocumentDTO extends AbstractModel {
-    private String Title;
+    private String title;
     private String content;
     private List<GeneratedQuestionDTO> questions;
 }

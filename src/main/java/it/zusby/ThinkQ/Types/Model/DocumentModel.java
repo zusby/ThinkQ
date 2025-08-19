@@ -9,7 +9,7 @@ import java.util.List;
 @Data
 public class DocumentModel extends AbstractModel{
 
-    private String Title;
+    private String title;
     private String content;
     private List<GeneratedQuestionModel> questions;
 }
