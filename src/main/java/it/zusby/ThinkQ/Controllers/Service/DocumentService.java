@@ -1,23 +1,17 @@
 package it.zusby.ThinkQ.Controllers.Service;
 
-import dev.langchain4j.model.ollama.OllamaLanguageModel;
-import dev.langchain4j.model.output.Response;
 import it.zusby.ThinkQ.Controllers.Persistence.DocumentPersistence;
 import it.zusby.ThinkQ.Mappers.DocumentModelMapper;
 import it.zusby.ThinkQ.Types.Dto.DocumentCreateDTO;
 import it.zusby.ThinkQ.Types.Dto.DocumentDTO;
-import it.zusby.ThinkQ.Types.Dto.TestDocumentDTO;
 import it.zusby.ThinkQ.Types.Model.DocumentModel;
-import it.zusby.ThinkQ.Types.Model.GeneratedQuestionModel;
 import org.hibernate.service.spi.ServiceException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
-import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.UUID;
 
 @Service
 public class DocumentService {

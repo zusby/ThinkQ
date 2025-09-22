@@ -1,9 +1,6 @@
 package it.zusby.ThinkQ.Types.Entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.MappedSuperclass;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.*;
 
 import java.util.List;
@@ -24,6 +21,7 @@ public class DocumentEntity  extends AbstractEntity {
     private String content;
 
 
-    @OneToMany(cascade=ALL, mappedBy="id")
+    @OneToMany(mappedBy = "id", cascade = ALL, orphanRemoval = true)
+    @Column(name = "questions_id")
     private List<GeneratedQuestionEntity> questions;
 }

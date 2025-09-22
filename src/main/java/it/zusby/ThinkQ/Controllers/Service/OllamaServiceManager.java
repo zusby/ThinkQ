@@ -119,11 +119,13 @@ public class OllamaServiceManager {
                 question.setSourceText(line.replace("SORGENTE DOMANDA:", "").trim());
             }
         }
+        question.setOption1(options.get(0));
+        question.setOption2(options.get(1));
+        question.setOption3(options.get(2));
+        question.setOption4(options.get(3));
 
-        question.setOptions(options);
         var document = new DocumentModel();
         document.setId(documentId);
-        question.setDocument(document);
 
         return question;
     }
