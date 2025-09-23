@@ -4,6 +4,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 @EqualsAndHashCode(callSuper = true)
 @Data
@@ -11,5 +12,5 @@ public class QuestionFeedbackModel  extends AbstractModel{
     private String comment;
     private boolean isCorrect;
     private LocalDateTime submittedAt;
-    private GeneratedQuestionModel question;
+    private UUID questionId;
 }

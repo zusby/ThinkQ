@@ -124,8 +124,7 @@ public class OllamaServiceManager {
         question.setOption3(options.get(2));
         question.setOption4(options.get(3));
 
-        var document = new DocumentModel();
-        document.setId(documentId);
+        question.setDocumentId(documentId);
 
         return question;
     }

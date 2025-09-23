@@ -4,6 +4,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 import java.util.List;
+import java.util.UUID;
 
 @EqualsAndHashCode(callSuper = true)
 @Data
@@ -18,4 +19,5 @@ public class GeneratedQuestionModel extends AbstractModel{
     private String option4;
     private String correctAnswer;
     private QuestionFeedbackModel feedbacks;
+    private UUID DocumentId;
 }

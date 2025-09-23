@@ -3,6 +3,7 @@ package it.zusby.ThinkQ.Types.Entity;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static jakarta.persistence.CascadeType.ALL;
@@ -15,13 +16,12 @@ import static jakarta.persistence.CascadeType.ALL;
 @AllArgsConstructor
 public class DocumentEntity  extends AbstractEntity {
 
-
+    @Column(name = "title")
     private String title;
 
+    @Column(name = "content")
     private String content;
 
-
-    @OneToMany(mappedBy = "id", cascade = ALL, orphanRemoval = true)
-    @Column(name = "questions_id")
-    private List<GeneratedQuestionEntity> questions;
+    @OneToMany(mappedBy = "document", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<GeneratedQuestionEntity> questions = new ArrayList<>();
 }

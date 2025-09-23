@@ -51,7 +51,7 @@ public class DocumentService {
 
 
     public DocumentDTO getDocument(String id) {
-        return null;
+        return mapper.fromModelToDto(this.persistence.findById(id));
     }
 
     public boolean delete(String id) {
@@ -71,7 +71,7 @@ public class DocumentService {
         }
         if (doc.getAppUser() == null || doc.getAppUser().isEmpty()) {
             flag = true;
-            error += " AppUser non valido";
+            error += " appUser non valido";
         }
         if (flag) {
             throw new ServiceException(error);

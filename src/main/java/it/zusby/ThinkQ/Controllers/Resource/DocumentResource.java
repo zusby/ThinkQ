@@ -24,7 +24,7 @@ public class DocumentResource {
         this.ds = ds;
     }
 
-    @PutMapping("/new")
+    @PostMapping("/new")
     public ResponseEntity<DocumentDTO> newDocument(@RequestBody DocumentCreateDTO doc) {
         log.info("New document {}, {}", doc.getTitle(), LocalDateTime.now());
 
@@ -35,11 +35,11 @@ public class DocumentResource {
         }
     }
     @GetMapping("/get/{id}")
-    public ResponseEntity<DocumentDTO> getDocument(@PathVariable String id) {
+    public DocumentDTO getDocument(@PathVariable String id) {
         log.info("get document {}, {}", id, LocalDateTime.now());
 
         try{
-            return ResponseEntity.ok().body(ds.getDocument(id));
+            return ds.getDocument(id);
         }
         catch (ServiceException e){
             throw new ResourceClosedException(e.getMessage());

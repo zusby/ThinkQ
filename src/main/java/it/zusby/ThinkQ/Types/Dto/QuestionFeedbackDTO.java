@@ -4,6 +4,7 @@ import it.zusby.ThinkQ.Types.Model.GeneratedQuestionModel;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 
 @EqualsAndHashCode(callSuper = true)
@@ -13,6 +14,6 @@ public class QuestionFeedbackDTO extends AbstractDTO {
     private String comment;
     private boolean isCorrect;
     private LocalDateTime submittedAt;
-    private GeneratedQuestionModel question;
+    private UUID questionId;
 
 }

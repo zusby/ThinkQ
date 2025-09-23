@@ -7,6 +7,8 @@ import jakarta.persistence.PersistenceException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.UUID;
+
 @Service
 public class DocumentPersistence {
     private final DocumentRepository repository;
@@ -23,7 +25,20 @@ public class DocumentPersistence {
     public DocumentModel save(DocumentModel model) {
 
         var entity = documentEntityMapper.fromModelToEntity(model);
+        if (entity.getQuestions() != null) {
+            for (var question : entity.getQuestions()) {
+                question.setDocument(entity);
+            }
+        }
         return mapper.fromEntityToModel(repository.save(entity));
+    }
 
+    public DocumentModel findById(String id) {
+
+        var doc = this.repository.findById(UUID.fromString(id));
+        if(doc.isPresent()) {
+            return mapper.fromEntityToModel(doc.get());
+        }
+        return null;
     }
 }

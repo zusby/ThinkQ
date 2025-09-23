@@ -6,6 +6,8 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 import java.util.List;
+import java.util.UUID;
+
 @EqualsAndHashCode(callSuper = true)
 @Data
 public class GeneratedQuestionDTO extends AbstractModel {
@@ -18,6 +20,6 @@ public class GeneratedQuestionDTO extends AbstractModel {
     private String option4;
     private String correctAnswer;
 
-    private DocumentDTO document;
+    private UUID documentId;
     private QuestionFeedbackDTO feedbacks;
 }

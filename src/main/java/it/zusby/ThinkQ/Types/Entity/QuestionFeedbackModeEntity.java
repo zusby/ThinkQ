@@ -1,8 +1,6 @@
 package it.zusby.ThinkQ.Types.Entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.OneToOne;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDateTime;
@@ -22,6 +20,7 @@ public class QuestionFeedbackModeEntity extends AbstractEntity {
 
     private LocalDateTime submittedAt;
 
-    @OneToOne(mappedBy = "feedbacks")
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name="id")
     private GeneratedQuestionEntity generatedQuestion;
 }

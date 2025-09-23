@@ -1,18 +1,20 @@
 package it.zusby.ThinkQ.Auth2;
 
 
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.*;
 import org.springframework.stereotype.Service;
-
-import java.util.stream.Collectors;
 
 @Service
 public class JpaUserDetailsService implements UserDetailsService {
 
     private final UserRepository repo;
 
-    public JpaUserDetailsService(UserRepository repo) { this.repo = repo; }
+
+    @Autowired
+    public JpaUserDetailsService( UserRepository repo) {
+        this.repo = repo;
+    }
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {

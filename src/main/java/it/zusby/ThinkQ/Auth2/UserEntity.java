@@ -7,9 +7,9 @@ import org.springframework.boot.autoconfigure.domain.EntityScan;
 
 import java.time.LocalDate;
 import java.util.UUID;
-@EntityScan(basePackages = "it.zusby.ThinkQ.Auth2")
 @Entity @Table(name="users")
-@Getter @Setter @NoArgsConstructor @AllArgsConstructor @Builder
+@Getter @Setter
+@Builder @AllArgsConstructor @NoArgsConstructor
 public class UserEntity {
 
     @Id
