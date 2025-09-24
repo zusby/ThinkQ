@@ -4,6 +4,7 @@ import it.zusby.ThinkQ.Controllers.Persistence.DocumentPersistence;
 import it.zusby.ThinkQ.Mappers.DocumentModelMapper;
 import it.zusby.ThinkQ.Types.Dto.DocumentCreateDTO;
 import it.zusby.ThinkQ.Types.Dto.DocumentDTO;
+import it.zusby.ThinkQ.Types.Dto.GeneratedQuestionDTO;
 import it.zusby.ThinkQ.Types.Model.DocumentModel;
 import org.hibernate.service.spi.ServiceException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,17 +27,25 @@ public class DocumentService {
         this.persistence = persistence;
     }
 
-
+    public DocumentDTO generateNewQuestions(String id) {
+        var model = this.persistence.findById(id);
+        if(model!=null){
+            var question = llmService.generateSingleQuestion(model.getContent(),model.getId(),model);
+            model.setQuestions(List.of(question));
+            return mapper.fromModelToDto(persistence.save(model));
+        }
+        throw new ServiceException("No question found with id " + id);
+    }
     public DocumentDTO generateQuestions(DocumentCreateDTO doc) {
         validate(doc);
         DocumentModel model = mapper.fromCreateDTO(doc);
         model.setCreatedAt(LocalDateTime.now());
-        var saved = persistence.save(model);
+        var savedModel = persistence.save(model);
 
-        var question = llmService.generateSingleQuestion(doc.getContent(),saved.getId());
-        saved.setQuestions(List.of(question));
+        var question = llmService.generateSingleQuestion(doc.getContent(),savedModel.getId(),savedModel);
+        savedModel.setQuestions(List.of(question));
 
-        return mapper.fromModelToDto(persistence.save(saved));
+        return mapper.fromModelToDto(persistence.save(savedModel));
 
     }
 
@@ -55,7 +64,7 @@ public class DocumentService {
     }
 
     public boolean delete(String id) {
-        return false;
+        return this.persistence.delete(id);
     }
 
     private void validate(DocumentCreateDTO doc) {
@@ -76,5 +85,10 @@ public class DocumentService {
         if (flag) {
             throw new ServiceException(error);
         }
+    }
+
+
+    public List<GeneratedQuestionDTO> getQuestionsByDocumentId(String id) {
+        return this.persistence.findQuestionsByDocumentId(id);
     }
 }

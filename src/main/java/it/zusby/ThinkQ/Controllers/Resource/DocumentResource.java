@@ -4,6 +4,7 @@ import it.zusby.ThinkQ.Controllers.Service.DocumentService;
 import it.zusby.ThinkQ.Mappers.DocumentModelMapper;
 import it.zusby.ThinkQ.Types.Dto.DocumentCreateDTO;
 import it.zusby.ThinkQ.Types.Dto.DocumentDTO;
+import it.zusby.ThinkQ.Types.Dto.GeneratedQuestionDTO;
 import lombok.extern.slf4j.Slf4j;
 import org.hibernate.ResourceClosedException;
 import org.hibernate.service.spi.ServiceException;
@@ -12,6 +13,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @RestController
 @RequestMapping("/document")
@@ -51,8 +53,30 @@ public class DocumentResource {
         log.info("delete document {}, {}", id, LocalDateTime.now());
 
         try{
-            ds.delete(id);
-            return ResponseEntity.ok().body(Boolean.TRUE);
+            return ResponseEntity.ok().body(this.ds.delete(id));
+        }
+        catch (ServiceException e){
+            throw new ResourceClosedException(e.getMessage());
+        }
+    }
+    @PostMapping("/{id}/question/new")
+    public ResponseEntity<DocumentDTO> generateQuestion(@PathVariable String id) {
+        log.info("GenerateQuestion document {}, {}", id, LocalDateTime.now());
+
+        try{
+            return ResponseEntity.ok().body(this.ds.generateNewQuestions(id));
+        }
+        catch (ServiceException e){
+            throw new ResourceClosedException(e.getMessage());
+        }
+    }
+
+    @GetMapping("/{id}/questions")
+    public List<GeneratedQuestionDTO> GetQuestions(@PathVariable String id) {
+        log.info("GenerateQuestion document {}, {}", id, LocalDateTime.now());
+
+        try{
+            return this.ds.getQuestionsByDocumentId(id);
         }
         catch (ServiceException e){
             throw new ResourceClosedException(e.getMessage());

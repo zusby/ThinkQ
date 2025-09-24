@@ -1,13 +1,17 @@
 package it.zusby.ThinkQ.Types.Model;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 
 import java.util.List;
 import java.util.UUID;
 
-@EqualsAndHashCode(callSuper = true)
+@NoArgsConstructor
+@AllArgsConstructor
 @Data
+@EqualsAndHashCode(callSuper = true)
 public class GeneratedQuestionModel extends AbstractModel{
 
     private String questionText;

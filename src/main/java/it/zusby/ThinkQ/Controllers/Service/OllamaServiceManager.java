@@ -2,12 +2,14 @@ package it.zusby.ThinkQ.Controllers.Service;
 
 import dev.langchain4j.model.ollama.OllamaLanguageModel;
 import dev.langchain4j.model.output.Response;
+import it.zusby.ThinkQ.Types.Model.AbstractModel;
 import it.zusby.ThinkQ.Types.Model.DocumentModel;
 import it.zusby.ThinkQ.Types.Model.GeneratedQuestionModel;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.time.Duration;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -31,7 +33,7 @@ public class OllamaServiceManager {
     /**
      * Genera una sola domanda e la trasforma in GeneratedQuestionModel.
      */
-    public GeneratedQuestionModel generateSingleQuestion(String text, UUID documentId) {
+    public GeneratedQuestionModel generateSingleQuestion(String text, UUID documentId, AbstractModel callerModel) {
         Response<String> output = model.generate(
                 """
                 Leggi il seguente testo e genera una domanda a scelta multipla con una sola risposta corretta e la sorgente da cui hai preso la domanda, ovvero il pezzo di testo da cui l'hai presa.
@@ -49,16 +51,16 @@ public class OllamaServiceManager {
                 """ + text
         );
 
-        return parseQuestionBlock(output.content(), documentId);
+        return parseQuestionBlock(output.content(), documentId, callerModel);
     }
 
     /**
      * genera n domande facendo n chiamate indipendenti.
      */
-    public List<GeneratedQuestionModel> generateMultipleQuestionsOneByOne(String text, int n, UUID documentId) {
+    public List<GeneratedQuestionModel> generateMultipleQuestionsOneByOne(String text, int n, UUID documentId,AbstractModel callerModel) {
         List<GeneratedQuestionModel> questions = new ArrayList<>();
         for (int i = 0; i < n; i++) {
-            questions.add(generateSingleQuestion(text, documentId));
+            questions.add(generateSingleQuestion(text, documentId, callerModel));
         }
         return questions;
     }
@@ -66,7 +68,7 @@ public class OllamaServiceManager {
     /**
      * genera n domande in una sola chiamata.
      */
-    public List<GeneratedQuestionModel> generateMultipleQuestionsInOneCall(String text, int n, UUID documentId) {
+    public List<GeneratedQuestionModel> generateMultipleQuestionsInOneCall(String text, int n,  UUID documentId, AbstractModel callerModel) {
         String line = " Leggi il seguente testo e genera " + n + "domande a scelta multipla.";
         Response<String> output = model.generate(
                 line+
@@ -91,7 +93,7 @@ public class OllamaServiceManager {
         List<GeneratedQuestionModel> questions = new ArrayList<>();
         for (String q : rawQuestions) {
             if (!q.trim().isEmpty()) {
-                questions.add(parseQuestionBlock(q, documentId));
+                questions.add(parseQuestionBlock(q, documentId, callerModel));
             }
         }
 
@@ -101,8 +103,13 @@ public class OllamaServiceManager {
     /**
      * Parser che trasforma un blocco di testo del modello in GeneratedQuestionModel.
      */
-    private GeneratedQuestionModel parseQuestionBlock(String block, UUID documentId) {
+    private GeneratedQuestionModel parseQuestionBlock(String block,  UUID documentId,AbstractModel model) {
         GeneratedQuestionModel question = new GeneratedQuestionModel();
+
+        question.setDocumentId(documentId);
+        question.setAppUser(model.getAppUser());
+        question.setCreatedAt(LocalDateTime.now());
+
 
         String[] lines = block.split("\n");
         List<String> options = new ArrayList<>();
@@ -124,7 +131,7 @@ public class OllamaServiceManager {
         question.setOption3(options.get(2));
         question.setOption4(options.get(3));
 
-        question.setDocumentId(documentId);
+
 
         return question;
     }
