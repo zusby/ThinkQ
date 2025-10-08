@@ -11,6 +11,5 @@ import java.util.UUID;
 public class QuestionFeedbackModel  extends AbstractModel{
     private String comment;
     private boolean isCorrect;
-    private LocalDateTime submittedAt;
     private UUID questionId;
 }

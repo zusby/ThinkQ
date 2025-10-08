@@ -26,5 +26,5 @@ public class GeneratedQuestionEntity extends AbstractEntity {
 
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name="id_question_feedback")
-    private QuestionFeedbackModeEntity feedbacks;
+    private QuestionFeedbackEntity feedbacks;
 }

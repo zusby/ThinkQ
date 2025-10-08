@@ -13,7 +13,6 @@ public class QuestionFeedbackDTO extends AbstractDTO {
 
     private String comment;
     private boolean isCorrect;
-    private LocalDateTime submittedAt;
     private UUID questionId;
 
 }

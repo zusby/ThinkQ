@@ -36,19 +36,19 @@ public class OllamaServiceManager {
     public GeneratedQuestionModel generateSingleQuestion(String text, UUID documentId, AbstractModel callerModel) {
         Response<String> output = model.generate(
                 """
-                Leggi il seguente testo e genera una domanda a scelta multipla con una sola risposta corretta e la sorgente da cui hai preso la domanda, ovvero il pezzo di testo da cui l'hai presa.
-                Usa esattamente questo formato:
-           
-                DOMANDA: Qual è la capitale d'Italia?
-                RISPOSTA 1: Milano
-                RISPOSTA 2: Roma
-                RISPOSTA 3: Napoli
-                RISPOSTA 4: Torino
-                RISPOSTA CORRETTA: 2
-                SORGENTE DOMANDA: Tra le varie capitali degli stati del mondo, Roma in Italia, ospita il Colosseo assieme a gran parte del patrimonio dell'UNESCO
-           
-                Ora il testo:
-                """ + text
+                        Leggi il seguente testo e genera una domanda a scelta multipla con una sola risposta corretta e la sorgente da cui hai preso la domanda, ovvero il pezzo di testo da cui l'hai presa.
+                        Usa esattamente questo formato:
+                        
+                        DOMANDA: Qual è la capitale d'Italia?
+                        RISPOSTA 1: Milano
+                        RISPOSTA 2: Roma
+                        RISPOSTA 3: Napoli
+                        RISPOSTA 4: Torino
+                        RISPOSTA CORRETTA: 2
+                        SORGENTE DOMANDA: Tra le varie capitali degli stati del mondo, Roma in Italia, ospita il Colosseo assieme a gran parte del patrimonio dell'UNESCO
+                        
+                        Ora il testo:
+                        """ + text
         );
 
         return parseQuestionBlock(output.content(), documentId, callerModel);
@@ -57,7 +57,7 @@ public class OllamaServiceManager {
     /**
      * genera n domande facendo n chiamate indipendenti.
      */
-    public List<GeneratedQuestionModel> generateMultipleQuestionsOneByOne(String text, int n, UUID documentId,AbstractModel callerModel) {
+    public List<GeneratedQuestionModel> generateMultipleQuestionsOneByOne(String text, int n, UUID documentId, AbstractModel callerModel) {
         List<GeneratedQuestionModel> questions = new ArrayList<>();
         for (int i = 0; i < n; i++) {
             questions.add(generateSingleQuestion(text, documentId, callerModel));
@@ -68,24 +68,24 @@ public class OllamaServiceManager {
     /**
      * genera n domande in una sola chiamata.
      */
-    public List<GeneratedQuestionModel> generateMultipleQuestionsInOneCall(String text, int n,  UUID documentId, AbstractModel callerModel) {
+    public List<GeneratedQuestionModel> generateMultipleQuestionsInOneCall(String text, int n, UUID documentId, AbstractModel callerModel) {
         String line = " Leggi il seguente testo e genera " + n + "domande a scelta multipla.";
         Response<String> output = model.generate(
-                line+
-                """
-                Ogni domanda deve avere una sola risposta corretta e includere la sorgente da cui è stata estratta.
-                Usa esattamente questo formato e ripetilo per ciascuna domanda:
-                
-                DOMANDA: Qual è la capitale d'Italia?
-                RISPOSTA 1: Milano
-                RISPOSTA 2: Roma
-                RISPOSTA 3: Napoli
-                RISPOSTA 4: Torino
-                RISPOSTA CORRETTA: 2
-                SORGENTE DOMANDA: Tra le varie capitali degli stati del mondo, Roma in Italia, ospita il Colosseo assieme a gran parte del patrimonio dell'UNESCO
-                
-                Ora il testo:
-                """ + text
+                line +
+                        """
+                                Ogni domanda deve avere una sola risposta corretta e includere la sorgente da cui è stata estratta.
+                                Usa esattamente questo formato e ripetilo per ciascuna domanda:
+                                
+                                DOMANDA: Qual è la capitale d'Italia?
+                                RISPOSTA 1: Milano
+                                RISPOSTA 2: Roma
+                                RISPOSTA 3: Napoli
+                                RISPOSTA 4: Torino
+                                RISPOSTA CORRETTA: 2
+                                SORGENTE DOMANDA: Tra le varie capitali degli stati del mondo, Roma in Italia, ospita il Colosseo assieme a gran parte del patrimonio dell'UNESCO
+                                
+                                Ora il testo:
+                                """ + text
         );
 
         String[] rawQuestions = output.content().split("(?=DOMANDA:)");
@@ -96,6 +96,7 @@ public class OllamaServiceManager {
                 questions.add(parseQuestionBlock(q, documentId, callerModel));
             }
         }
+        String[] rawAnswer = output.content().split("(?=DOMANDA:)");
 
         return questions;
     }
@@ -103,7 +104,7 @@ public class OllamaServiceManager {
     /**
      * Parser che trasforma un blocco di testo del modello in GeneratedQuestionModel.
      */
-    private GeneratedQuestionModel parseQuestionBlock(String block,  UUID documentId,AbstractModel model) {
+    private GeneratedQuestionModel parseQuestionBlock(String block, UUID documentId, AbstractModel model) {
         GeneratedQuestionModel question = new GeneratedQuestionModel();
 
         question.setDocumentId(documentId);
@@ -116,12 +117,15 @@ public class OllamaServiceManager {
 
         for (String line : lines) {
             line = line.trim();
+            if (line.isEmpty()) {
+                System.out.println("diocane");
+            }
             if (line.startsWith("DOMANDA:")) {
                 question.setQuestionText(line.replace("DOMANDA:", "").trim());
-            } else if (line.startsWith("RISPOSTA ")) {
-                options.add(line.substring(line.indexOf(":") + 1).trim());
             } else if (line.startsWith("RISPOSTA CORRETTA:")) {
                 question.setCorrectAnswer(line.replace("RISPOSTA CORRETTA:", "").trim());
+            } else if (line.startsWith("RISPOSTA ")) {
+                options.add(line.substring(line.indexOf(":") + 1).trim());
             } else if (line.startsWith("SORGENTE DOMANDA:")) {
                 question.setSourceText(line.replace("SORGENTE DOMANDA:", "").trim());
             }
@@ -130,7 +134,6 @@ public class OllamaServiceManager {
         question.setOption2(options.get(1));
         question.setOption3(options.get(2));
         question.setOption4(options.get(3));
-
 
 
         return question;

@@ -61,7 +61,7 @@ public class DocumentResource {
     }
     @PostMapping("/{id}/question/new")
     public ResponseEntity<DocumentDTO> generateQuestion(@PathVariable String id) {
-        log.info("GenerateQuestion document {}, {}", id, LocalDateTime.now());
+        log.info("CREATE GenerateQuestion document {}, {}", id, LocalDateTime.now());
 
         try{
             return ResponseEntity.ok().body(this.ds.generateNewQuestions(id));
@@ -73,7 +73,7 @@ public class DocumentResource {
 
     @GetMapping("/{id}/questions")
     public List<GeneratedQuestionDTO> GetQuestions(@PathVariable String id) {
-        log.info("GenerateQuestion document {}, {}", id, LocalDateTime.now());
+        log.info("GET GenerateQuestion document {}, {}", id, LocalDateTime.now());
 
         try{
             return this.ds.getQuestionsByDocumentId(id);
@@ -82,4 +82,6 @@ public class DocumentResource {
             throw new ResourceClosedException(e.getMessage());
         }
     }
+
+
 }

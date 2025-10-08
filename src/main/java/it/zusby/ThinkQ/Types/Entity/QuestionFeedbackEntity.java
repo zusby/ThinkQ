@@ -11,13 +11,12 @@ import java.time.LocalDateTime;
 @Setter
 @ToString
 @RequiredArgsConstructor
-public class QuestionFeedbackModeEntity extends AbstractEntity {
+public class QuestionFeedbackEntity extends AbstractEntity {
 
     private String comment;
 
     private boolean isCorrect;
 
-    private LocalDateTime submittedAt;
 
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name="id")
