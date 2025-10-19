@@ -8,8 +8,8 @@ import org.mapstruct.Mapping;
 @Mapper(componentModel = "spring")
 public interface GeneratedQuestionEntityMapper {
     @Mapping(target = "documentId", source = "document.id")
-    GeneratedQuestionModel fromEntityToModel(GeneratedQuestionEntity entity);
+    GeneratedQuestionModel toModel(GeneratedQuestionEntity entity);
 
     @Mapping(target = "document", ignore = true) // lo settiamo a mano dopo
-    GeneratedQuestionEntity fromModelToEntity(GeneratedQuestionModel model);
+    GeneratedQuestionEntity toEntity(GeneratedQuestionModel model);
 }

@@ -24,7 +24,7 @@ public class GeneratedQuestionEntity extends AbstractEntity {
     @JoinColumn(name = "document_id")
     private DocumentEntity document;
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne(cascade = CascadeType.ALL, fetch=FetchType.LAZY)
     @JoinColumn(name="id_question_feedback")
-    private QuestionFeedbackEntity feedbacks;
+    private QuestionFeedbackEntity feedback;
 }

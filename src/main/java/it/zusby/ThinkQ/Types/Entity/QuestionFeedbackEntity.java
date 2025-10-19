@@ -15,10 +15,9 @@ public class QuestionFeedbackEntity extends AbstractEntity {
 
     private String comment;
 
-    private boolean isCorrect;
+    private String correctAnswer;
 
-
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name="id")
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "id_generated_question", nullable = false)
     private GeneratedQuestionEntity generatedQuestion;
 }

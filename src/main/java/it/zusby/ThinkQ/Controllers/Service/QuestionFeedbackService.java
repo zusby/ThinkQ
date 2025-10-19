@@ -1,5 +1,6 @@
 package it.zusby.ThinkQ.Controllers.Service;
 
+import it.zusby.ThinkQ.Controllers.Persistence.GeneratedQuestionPersistence;
 import it.zusby.ThinkQ.Controllers.Persistence.QuestionFeedBackPersistence;
 import it.zusby.ThinkQ.Mappers.QuestionFeedbackModelMapper;
 import it.zusby.ThinkQ.Types.Dto.QuestionFeedbackDTO;
@@ -18,10 +19,12 @@ public class QuestionFeedbackService {
 
     private final QuestionFeedBackPersistence qp;
     private final QuestionFeedbackModelMapper mapper;
+    private final GeneratedQuestionPersistence questionPersistence;
     @Autowired
-    public QuestionFeedbackService(@Qualifier("questionFeedbackModelMapperImpl") QuestionFeedbackModelMapper mapper, QuestionFeedBackPersistence persistence){
+    public QuestionFeedbackService(@Qualifier("questionFeedbackModelMapperImpl") QuestionFeedbackModelMapper mapper, QuestionFeedBackPersistence persistence, GeneratedQuestionPersistence questionPersistence, GeneratedQuestionPersistence questionPersistence1){
         this.qp = persistence;
         this.mapper = mapper;
+        this.questionPersistence = questionPersistence;
     }
 
     public QuestionFeedbackDTO getFeedbackById(UUID id) {
@@ -41,9 +44,13 @@ public class QuestionFeedbackService {
             throw new ServiceException("Feedback must have a question id");
         }
 
-        model.setId(UUID.randomUUID());
         model.setCreatedAt(LocalDateTime.now());
         try{
+            var question = questionPersistence.getGeneratedQuestion(model.getQuestionId());
+            if(!model.getCorrectAnswer().equals(question.getCorrectAnswer())){
+                question.setCorrectAnswer(model.getCorrectAnswer());
+                questionPersistence.updateCorrectAnswer(model.getCorrectAnswer(),question.getId());
+            }
             return mapper.toDTO(qp.createFeedback(model));
         }catch (ServiceException e){
             throw new ServiceException(e.getMessage());

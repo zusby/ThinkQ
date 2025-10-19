@@ -12,7 +12,7 @@ import java.util.UUID;
 public class QuestionFeedbackDTO extends AbstractDTO {
 
     private String comment;
-    private boolean isCorrect;
+    private String correctAnswer;
     private UUID questionId;
 
 }

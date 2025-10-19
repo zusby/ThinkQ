@@ -1,9 +1,6 @@
 package it.zusby.ThinkQ.Types.Entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.MappedSuperclass;
+import jakarta.persistence.*;
 import lombok.*;
 
 import java.io.Serializable;
@@ -21,6 +18,7 @@ public abstract class AbstractEntity  implements Serializable {
     @Id
     @GeneratedValue(generator = "UUID")
     @EqualsAndHashCode.Include
+    @Column(columnDefinition = "uuid")
     private UUID id;
 
     private String appUser;

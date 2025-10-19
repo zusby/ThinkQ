@@ -10,6 +10,6 @@ import java.util.UUID;
 @Data
 public class QuestionFeedbackModel  extends AbstractModel{
     private String comment;
-    private boolean isCorrect;
+    private String correctAnswer;
     private UUID questionId;
 }
